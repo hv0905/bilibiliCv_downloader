@@ -2,15 +2,20 @@
 // @name         Bilibili CV Downloader
 // @version      0.1
 // @description  Easy to download images from BilibiliCV!!
-// @author       EdgeNeko
+// @author       EdgeNeko(Github@hv0905)
 // @match        https://www.bilibili.com/read/cv*
-// @grant       GM_download
-// @grant       GM_info
-// @grant       GM_xmlhttpRequest
-// @connect     i0.hdslb.com
+// @grant        GM_download
+// @grant        GM_info
+// @grant        GM_xmlhttpRequest
+// @connect      i0.hdslb.com
 // ==/UserScript==
 
-var baseDownload = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTQ1Mzk5NzI5NzM1IiBjbGFzcz0iaWNvbiIgc3R5bGU9IiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjI5MzciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj48L3N0eWxlPjwvZGVmcz48cGF0aCBkPSJNMTYwIDMyYy0xMiAwLTI0LjggNC44LTMzLjYgMTQuNFMxMTIgNjggMTEyIDgwdjg2NGMwIDEyIDQuOCAyNC44IDE0LjQgMzMuNiA5LjYgOS42IDIxLjYgMTQuNCAzMy42IDE0LjRoNzA0YzEyIDAgMjQuOC00LjggMzMuNi0xNC40IDkuNi05LjYgMTQuNC0yMS42IDE0LjQtMzMuNlYzMDRMNjQwIDMySDE2MHoiIGZpbGw9IiM1QUNDOUIiIHAtaWQ9IjI5MzgiPjwvcGF0aD48cGF0aCBkPSJNOTEyIDMwNEg2ODhjLTEyIDAtMjQuOC00LjgtMzMuNi0xNC40LTkuNi04LjgtMTQuNC0yMS42LTE0LjQtMzMuNlYzMmwyNzIgMjcyeiIgZmlsbD0iI0JERUJENyIgcC1pZD0iMjkzOSI+PC9wYXRoPjxwYXRoIGQ9Ik01MDAuOCA2ODQuOGMzLjIgMi40IDYuNCA0LjggMTEuMiA0LjggNCAwIDgtMS42IDExLjItNC44bDE0Mi40LTEzNmMyLjQtMi40IDMuMi01LjYgMS42LTguOC0xLjYtMy4yLTQtNC44LTcuMi00LjhINTc2di0xMzZjMC00LTEuNi04LTQuOC0xMS4yLTMuMi0zLjItNy4yLTQuOC0xMS4yLTQuOEg0NjRjLTQgMC04IDEuNi0xMS4yIDQuOC0zLjIgMy4yLTQuOCA3LjItNC44IDExLjJ2MTM2SDM2NGMtMy4yIDAtNi40IDEuNi03LjIgNC44LTEuNiAzLjIgMCA2LjQgMS42IDguOGwxNDIuNCAxMzZ6TTcxMiA3NTEuMkgzMTJjLTguOCAwLTE2IDcuMi0xNiAxNnM3LjIgMTYgMTYgMTZoNDAwYzguOCAwIDE2LTcuMiAxNi0xNnMtNy4yLTE2LTE2LTE2eiIgZmlsbD0iI0ZGRkZGRiIgcC1pZD0iMjk0MCI+PC9wYXRoPjwvc3ZnPg==';
+//Bilibili CV Downloader
+//build with love by EdgeNeko
+//Github: @hv0905
+//github project:
+
+const baseDownload = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTQ1Mzk5NzI5NzM1IiBjbGFzcz0iaWNvbiIgc3R5bGU9IiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjI5MzciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj48L3N0eWxlPjwvZGVmcz48cGF0aCBkPSJNMTYwIDMyYy0xMiAwLTI0LjggNC44LTMzLjYgMTQuNFMxMTIgNjggMTEyIDgwdjg2NGMwIDEyIDQuOCAyNC44IDE0LjQgMzMuNiA5LjYgOS42IDIxLjYgMTQuNCAzMy42IDE0LjRoNzA0YzEyIDAgMjQuOC00LjggMzMuNi0xNC40IDkuNi05LjYgMTQuNC0yMS42IDE0LjQtMzMuNlYzMDRMNjQwIDMySDE2MHoiIGZpbGw9IiM1QUNDOUIiIHAtaWQ9IjI5MzgiPjwvcGF0aD48cGF0aCBkPSJNOTEyIDMwNEg2ODhjLTEyIDAtMjQuOC00LjgtMzMuNi0xNC40LTkuNi04LjgtMTQuNC0yMS42LTE0LjQtMzMuNlYzMmwyNzIgMjcyeiIgZmlsbD0iI0JERUJENyIgcC1pZD0iMjkzOSI+PC9wYXRoPjxwYXRoIGQ9Ik01MDAuOCA2ODQuOGMzLjIgMi40IDYuNCA0LjggMTEuMiA0LjggNCAwIDgtMS42IDExLjItNC44bDE0Mi40LTEzNmMyLjQtMi40IDMuMi01LjYgMS42LTguOC0xLjYtMy4yLTQtNC44LTcuMi00LjhINTc2di0xMzZjMC00LTEuNi04LTQuOC0xMS4yLTMuMi0zLjItNy4yLTQuOC0xMS4yLTQuOEg0NjRjLTQgMC04IDEuNi0xMS4yIDQuOC0zLjIgMy4yLTQuOCA3LjItNC44IDExLjJ2MTM2SDM2NGMtMy4yIDAtNi40IDEuNi03LjIgNC44LTEuNiAzLjIgMCA2LjQgMS42IDguOGwxNDIuNCAxMzZ6TTcxMiA3NTEuMkgzMTJjLTguOCAwLTE2IDcuMi0xNiAxNnM3LjIgMTYgMTYgMTZoNDAwYzguOCAwIDE2LTcuMiAxNi0xNnMtNy4yLTE2LTE2LTE2eiIgZmlsbD0iI0ZGRkZGRiIgcC1pZD0iMjk0MCI+PC9wYXRoPjwvc3ZnPg==';
 var lastDownloadTime = 0;
 var missionCount = 0;
 var completedMissionCount = 0;
@@ -20,22 +25,25 @@ var downloaded = false;
 function ondownload() {
     'use strict';
     setNotifyText('开始下载');
-    var elements = document.getElementsByClassName('img-box');
-    missionCount = elements.length;
-    for (var i = 0; i < elements.length; i++) {
-        var img = elements[i].children[0].dataset.src;
-        var txt = elements[i].children[1].innerText;
-        var imgOriginal = img.split('@')[0];
-        var extSplits = imgOriginal.split('.');
-        var ext = extSplits[extSplits.length - 1];
-        var fileName = txt + '.' + ext;
+    let elements = document.getElementsByClassName('img-box');
+    for (let i = 0; i < elements.length; i++) {
+        let img = elements[i].children[0].dataset.src;
+        if (img == null || img == '') {
+            continue;
+        }
+        let txt = "untitled";
+        if (elements[i].children.length >= 2) {
+            //caption
+            txt = elements[i].children[1].innerText;
+        }
+        let imgOriginal = img.split('@')[0];
+        let extSplits = imgOriginal.split('.');
+        let ext = extSplits[extSplits.length - 1];
+        let fileName = txt + '.' + ext;
         console.log(`[${i}]准备下载:${imgOriginal}  文件名:${fileName}`);
-        //downloadFile(imgOriginal, fileName);
-        // GM_download({
-        //     url: imgOriginal,
-        //     name: fileName,
-        // });
-        downloadFileBlob('https:'+imgOriginal, fileName);
+        missionCount++;
+        //瞬间完成
+        downloadFileBlob('https:' + imgOriginal, fileName);
     }
 }
 
@@ -48,61 +56,52 @@ function downloadFileBlob(url, fileName) {
         timeout: 180000,
         onload: function (xhr) {
             let blobURL = window.URL.createObjectURL(xhr.response); // 返回的blob对象是整个response，而非responseText
-            // //控制点击下载按钮的时间间隔大于0.2秒
-            // if (new Date().getTime() - clickTime > 200) {
-            //     clickTime = new Date().getTime();
-            //     saveBlob(blobURL,fileName);
-            // } else {
-            //     setTimeout(() => {
-            //         saveBlob(blobURL,fileName);
-            //     }, 500 - (new Date().getTime() - clickTime));
-            // }
-            saveBlob(blobURL,fileName);
+            saveBlob(blobURL, fileName);
         },
         onprogress: function (xhr) {
             let loaded = parseInt(xhr.loaded / 1000);
             let total = parseInt(xhr.total / 1000);
-            console.log(`正在下载:${fileName}  进度:${(loaded/total)}`);
+            console.log(`正在下载:${fileName}  进度:${(loaded / total)}`);
         },
     });
 
 
 }
 
-function saveBlob(blob,fileName){
+function saveBlob(blob, fileName) {
     'use strict';
     if (new Date().getTime() - lastDownloadTime < 200) {
         setTimeout(() => {
-            saveBlob(blob,fileName);
+            saveBlob(blob, fileName);
         }, 200 - (new Date().getTime() - lastDownloadTime));
         return;
     }
     lastDownloadTime = new Date().getTime();
     console.log("正在保存:" + fileName);
-    var a = $('<a>')
-                .attr('href', blob)
-                .attr('download', fileName)
-                .appendTo('body');
+    let a = $('<a>')
+        .attr('href', blob)
+        .attr('download', fileName)
+        .appendTo('body');
 
-            a[0].click();
+    a[0].click();
 
-            a.remove();
-            window.URL.revokeObjectURL(blob);
-            completedMissionCount++;
-            checkIfCompleted();
+    a.remove();
+    window.URL.revokeObjectURL(blob);
+    completedMissionCount++;
+    checkIfCompleted();
 }
 
-function checkIfCompleted(){
+function checkIfCompleted() {
     'use strict';
-    if(missionCount <= completedMissionCount){
+    if (missionCount <= completedMissionCount) {
         alert('所有下载操作已完成!\n你可以关闭网页了');
         setNotifyText('下载完成!');
-    }else{
+    } else {
         setNotifyText(`下载进度:${completedMissionCount}/${missionCount}`);
     }
 }
 
-function setNotifyText(text){
+function setNotifyText(text) {
     replaceTarget.children[1].innerText = text;
 }
 
@@ -110,28 +109,19 @@ function setNotifyText(text){
 
 (function () {
     'use strict';
-    // Your code here...
-        // <a href='javascript:void(0)' id='bilibilicv_Download' target='_blank'>
-        //     <div class='help'>
-        //       <span class='icon' style='background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTQ1Mzk5NzI5NzM1IiBjbGFzcz0iaWNvbiIgc3R5bGU9IiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjI5MzciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj48L3N0eWxlPjwvZGVmcz48cGF0aCBkPSJNMTYwIDMyYy0xMiAwLTI0LjggNC44LTMzLjYgMTQuNFMxMTIgNjggMTEyIDgwdjg2NGMwIDEyIDQuOCAyNC44IDE0LjQgMzMuNiA5LjYgOS42IDIxLjYgMTQuNCAzMy42IDE0LjRoNzA0YzEyIDAgMjQuOC00LjggMzMuNi0xNC40IDkuNi05LjYgMTQuNC0yMS42IDE0LjQtMzMuNlYzMDRMNjQwIDMySDE2MHoiIGZpbGw9IiM1QUNDOUIiIHAtaWQ9IjI5MzgiPjwvcGF0aD48cGF0aCBkPSJNOTEyIDMwNEg2ODhjLTEyIDAtMjQuOC00LjgtMzMuNi0xNC40LTkuNi04LjgtMTQuNC0yMS42LTE0LjQtMzMuNlYzMmwyNzIgMjcyeiIgZmlsbD0iI0JERUJENyIgcC1pZD0iMjkzOSI+PC9wYXRoPjxwYXRoIGQ9Ik01MDAuOCA2ODQuOGMzLjIgMi40IDYuNCA0LjggMTEuMiA0LjggNCAwIDgtMS42IDExLjItNC44bDE0Mi40LTEzNmMyLjQtMi40IDMuMi01LjYgMS42LTguOC0xLjYtMy4yLTQtNC44LTcuMi00LjhINTc2di0xMzZjMC00LTEuNi04LTQuOC0xMS4yLTMuMi0zLjItNy4yLTQuOC0xMS4yLTQuOEg0NjRjLTQgMC04IDEuNi0xMS4yIDQuOC0zLjIgMy4yLTQuOCA3LjItNC44IDExLjJ2MTM2SDM2NGMtMy4yIDAtNi40IDEuNi03LjIgNC44LTEuNiAzLjIgMCA2LjQgMS42IDguOGwxNDIuNCAxMzZ6TTcxMiA3NTEuMkgzMTJjLTguOCAwLTE2IDcuMi0xNiAxNnM3LjIgMTYgMTYgMTZoNDAwYzguOCAwIDE2LTcuMiAxNi0xNnMtNy4yLTE2LTE2LTE2eiIgZmlsbD0iI0ZGRkZGRiIgcC1pZD0iMjk0MCI+PC9wYXRoPjwvc3ZnPg==);'>
-        //       </span>
-        //       <p class='title'>专栏帮助</p>
-        //       <p class='info'>查看专栏使用说明</p>
-        //     </div>
-        //   </a>
-        onload = function() {
-            replaceTarget = this.document.getElementsByClassName('help')[0];
-            var replaceA = replaceTarget.parentElement;
-            replaceA.href = 'javascript:void(0)';
-            replaceA.onclick = function () {
-                if(downloaded)return;
-                if(confirm('确认下载全部图片?\n注意:在弹出下载成功提示前请不要关闭窗口,否则无法保证所有图片均下载完成\n要查看进度,请点击F12并转到Console')){
-                    ondownload();
-                    downloaded = true;
-                }
+    onload = function () {
+        replaceTarget = this.document.getElementsByClassName('help')[0];
+        let replaceA = replaceTarget.parentElement;
+        replaceA.href = 'javascript:void(0)';
+        replaceA.onclick = function () {
+            if (downloaded) return;
+            if (confirm('确认下载全部图片?\n注意:在弹出下载成功提示前请不要关闭窗口,否则无法保证所有图片均下载完成\n要查看进度,请点击F12并转到Console')) {
+                ondownload();
+                downloaded = true;
             }
-            replaceTarget.children[0].style.backgroundImage = 'url(' + baseDownload + ')';
-            replaceTarget.children[1].innerText = '下载所有图片';
-            replaceTarget.children[2].innerText = 'by EdgeNeko'
-        };
+        }
+        replaceTarget.children[0].style.backgroundImage = 'url(' + baseDownload + ')';
+        replaceTarget.children[1].innerText = '下载所有图片';
+        replaceTarget.children[2].innerText = 'by EdgeNeko'
+    };
 })();
