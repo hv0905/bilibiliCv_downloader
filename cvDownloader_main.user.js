@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name         Bilibili CV Downloader
+// @namespace    https://github.com/hv0905/bilibiliCv_downloader
 // @version      0.1
 // @description  Easy to download images from BilibiliCV!!
 // @author       EdgeNeko(Github@hv0905)
-// @match        https://www.bilibili.com/read/cv*
+// @match        *www.bilibili.com/read/cv*
 // @grant        GM_download
 // @grant        GM_info
 // @grant        GM_xmlhttpRequest
