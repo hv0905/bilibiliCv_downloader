@@ -4,7 +4,7 @@
 // @version      1.1
 // @description  Easy to download images from BilibiliCV!!
 // @author       EdgeNeko(Github@hv0905)
-// @match        *www.bilibili.com/read/cv*
+// @match        *://www.bilibili.com/read/cv*
 // @grant        GM_download
 // @grant        GM_info
 // @grant        GM_xmlhttpRequest
@@ -31,7 +31,7 @@ function ondownload() {
     let elements = document.getElementsByClassName('img-box');
     for (let i = 0; i < elements.length; i++) {
         let img = elements[i].children[0].dataset.src;
-        if (img == null || img == '') {
+        if (img === null || img === '') {
             continue;
         }
         let txt = "";
