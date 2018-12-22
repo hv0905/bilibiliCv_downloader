@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bilibili CV Downloader
 // @namespace    https://github.com/hv0905/bilibiliCv_downloader
-// @version      1.0
+// @version      1.1
 // @description  Easy to download images from BilibiliCV!!
 // @author       EdgeNeko(Github@hv0905)
 // @match        *www.bilibili.com/read/cv*
@@ -15,6 +15,8 @@
 //build with love by EdgeNeko
 //Github: @hv0905
 //github project: https://github.com/hv0905/bilibiliCv_downloader/
+
+'use strict';
 
 const baseDownload = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/PjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+PHN2ZyB0PSIxNTQ1Mzk5NzI5NzM1IiBjbGFzcz0iaWNvbiIgc3R5bGU9IiIgdmlld0JveD0iMCAwIDEwMjQgMTAyNCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHAtaWQ9IjI5MzciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCI+PGRlZnM+PHN0eWxlIHR5cGU9InRleHQvY3NzIj48L3N0eWxlPjwvZGVmcz48cGF0aCBkPSJNMTYwIDMyYy0xMiAwLTI0LjggNC44LTMzLjYgMTQuNFMxMTIgNjggMTEyIDgwdjg2NGMwIDEyIDQuOCAyNC44IDE0LjQgMzMuNiA5LjYgOS42IDIxLjYgMTQuNCAzMy42IDE0LjRoNzA0YzEyIDAgMjQuOC00LjggMzMuNi0xNC40IDkuNi05LjYgMTQuNC0yMS42IDE0LjQtMzMuNlYzMDRMNjQwIDMySDE2MHoiIGZpbGw9IiM1QUNDOUIiIHAtaWQ9IjI5MzgiPjwvcGF0aD48cGF0aCBkPSJNOTEyIDMwNEg2ODhjLTEyIDAtMjQuOC00LjgtMzMuNi0xNC40LTkuNi04LjgtMTQuNC0yMS42LTE0LjQtMzMuNlYzMmwyNzIgMjcyeiIgZmlsbD0iI0JERUJENyIgcC1pZD0iMjkzOSI+PC9wYXRoPjxwYXRoIGQ9Ik01MDAuOCA2ODQuOGMzLjIgMi40IDYuNCA0LjggMTEuMiA0LjggNCAwIDgtMS42IDExLjItNC44bDE0Mi40LTEzNmMyLjQtMi40IDMuMi01LjYgMS42LTguOC0xLjYtMy4yLTQtNC44LTcuMi00LjhINTc2di0xMzZjMC00LTEuNi04LTQuOC0xMS4yLTMuMi0zLjItNy4yLTQuOC0xMS4yLTQuOEg0NjRjLTQgMC04IDEuNi0xMS4yIDQuOC0zLjIgMy4yLTQuOCA3LjItNC44IDExLjJ2MTM2SDM2NGMtMy4yIDAtNi40IDEuNi03LjIgNC44LTEuNiAzLjIgMCA2LjQgMS42IDguOGwxNDIuNCAxMzZ6TTcxMiA3NTEuMkgzMTJjLTguOCAwLTE2IDcuMi0xNiAxNnM3LjIgMTYgMTYgMTZoNDAwYzguOCAwIDE2LTcuMiAxNi0xNnMtNy4yLTE2LTE2LTE2eiIgZmlsbD0iI0ZGRkZGRiIgcC1pZD0iMjk0MCI+PC9wYXRoPjwvc3ZnPg==';
 var lastDownloadTime = 0;
@@ -32,15 +34,20 @@ function ondownload() {
         if (img == null || img == '') {
             continue;
         }
-        let txt = "untitled";
-        if (elements[i].children.length >= 2) {
+        let txt = "";
+        if (elements[i].children.length >= 2 && elements[i].children[1].innerHTML.trim().length != 0) {
             //caption
-            txt = elements[i].children[1].innerText;
+            txt = elements[i].children[1].innerHTML.trim();
         }
         let imgOriginal = img.split('@')[0];
-        let extSplits = imgOriginal.split('.');
-        let ext = extSplits[extSplits.length - 1];
-        let fileName = txt + '.' + ext;
+        let fileName;
+        if(txt.length == 0){
+            let urlSplit = imgOriginal.split('/');
+            fileName = urlSplit[urlSplit.length - 1];
+        }else{
+            let extSplits = imgOriginal.split('.');
+            fileName = txt.replace('\\','_').replace('/','_').replace('?','_').replace(':','_').replace('*','_').replace('|','_').replace('<','_').replace('>','_').replace('"','_') + '.' + extSplits[extSplits.length - 1];
+        }
         console.log(`[${i}]准备下载:${imgOriginal}  文件名:${fileName}`);
         missionCount++;
         //瞬间完成
@@ -103,6 +110,7 @@ function checkIfCompleted() {
 }
 
 function setNotifyText(text) {
+    'use strict';
     replaceTarget.children[1].innerText = text;
 }
 
