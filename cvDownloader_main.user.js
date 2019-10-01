@@ -122,6 +122,7 @@ function setNotifyText(text) {
         replaceTarget = this.document.getElementsByClassName('help')[0];
         let replaceA = replaceTarget.parentElement;
         replaceA.href = 'javascript:void(0)';
+        replaceA.target = '';
         replaceA.onclick = function () {
             if (downloaded) return;
             if (confirm('确认下载全部图片?\n注意:在弹出下载成功提示前请不要关闭窗口,否则无法保证所有图片均下载完成\n要查看进度,请点击F12并转到Console')) {
