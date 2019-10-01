@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bilibili CV Downloader
 // @namespace    https://github.com/hv0905/bilibiliCv_downloader
-// @version      1.2
+// @version      1.3
 // @description  Easy to download images from BilibiliCV!!
 // @author       EdgeNeko(Github@hv0905)
 // @match        *://www.bilibili.com/read/cv*
