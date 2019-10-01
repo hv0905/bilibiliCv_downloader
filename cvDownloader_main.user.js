@@ -51,11 +51,11 @@ function ondownload() {
         console.log(`[${i}]准备下载:${imgOriginal}  文件名:${fileName}`);
         missionCount++;
         //瞬间完成
-        downloadFileBlob('https:' + imgOriginal, fileName);
+        downloadFileBlob('https:' + imgOriginal, fileName, i);
     }
 }
 
-function downloadFileBlob(url, fileName) {
+function downloadFileBlob(url, fileName, i) {
     'use strict';
     GM_xmlhttpRequest({
         method: 'GET',
@@ -69,7 +69,7 @@ function downloadFileBlob(url, fileName) {
         onprogress: function (xhr) {
             let loaded = parseInt(xhr.loaded / 1000);
             let total = parseInt(xhr.total / 1000);
-            console.log(`正在下载:${fileName}  进度:${(loaded / total)}`);
+            console.log(`[${i}]正在下载:${fileName}  进度:${(loaded / total)}`);
         },
     });
 
