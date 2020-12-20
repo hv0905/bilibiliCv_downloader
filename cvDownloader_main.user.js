@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Bilibili CV Downloader
 // @namespace    https://github.com/hv0905/bilibiliCv_downloader
-// @version      1.3
+// @version      1.4
 // @description  Easy to download images from BilibiliCV!!
 // @author       EdgeNeko(Github@hv0905)
 // @match        *://www.bilibili.com/read/cv*
@@ -30,14 +30,14 @@ function ondownload() {
     setNotifyText('开始下载');
     let elements = document.getElementsByClassName('img-box');
     for (let i = 0; i < elements.length; i++) {
-        let img = elements[i].children[0].dataset.src;
-        if (img === null || img === '') {
+        let img = elements[i].querySelector('img').dataset.src;
+        if (!img) {
             continue;
         }
         let txt = "";
-        if (elements[i].children.length >= 2 && elements[i].children[1].innerHTML.trim().length != 0) {
+        if (elements[i].querySelector('.caption')) {
             //caption
-            txt = elements[i].children[1].innerHTML.trim();
+            txt = elements[i].querySelector('.caption').innerHTML.trim();
         }
         let imgOriginal = img.split('@')[0];
         let fileName;
