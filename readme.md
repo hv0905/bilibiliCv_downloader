@@ -4,7 +4,7 @@
 # Bilibili cv 图片下载器
 
 方便地批量下载bilibili专栏(cv)图片  
-使用后会把网页右侧`专栏帮助`按钮替换为`下载所有图片`,点击即可下载所有图片  
+使用后会在网页右侧工具栏添加按钮`下载`,点击即可下载所有图片  
 测试一下吧, <https://www.bilibili.com/read/cv1037107>  
 build in ❤ by EdgeNeko(Github @hv0905)  
 github项目: <https://github.com/hv0905/bilibiliCv_downloader>
@@ -19,4 +19,4 @@ github项目: <https://github.com/hv0905/bilibiliCv_downloader>
 
 # 截图
 
-![screen1](screenshot/screen1.jpg)
+![screen1](screenshot/screen1.png)
